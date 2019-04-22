@@ -1,2 +1,2 @@
-# Snake Mutiplayer Server
-by Koa2 and ws
+# Snake Mutiplayer Web Client
+use websocket
