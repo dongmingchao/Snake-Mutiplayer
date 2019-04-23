@@ -14,8 +14,6 @@ html, body {
 #map {
     position: absolute;
     margin: auto;
-    width: 670px;
-    height: 670px;
     border: 5px solid black;
     top: 0;
     bottom: 0;
@@ -29,7 +27,7 @@ html, body {
     height: 20px;
     background-color: red;
     position: absolute;
-    box-shadow: 0 0 15px 1px black;
+    box-shadow: 0 0 15px 1px rgb(100, 99, 99);
 }
 
 .food_span {
