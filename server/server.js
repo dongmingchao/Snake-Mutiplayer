@@ -6,6 +6,8 @@ import static_server from 'koa-static';
 import api from './api';
 import index from '../page/index';
 import step from '../page/users.coffee';
+import snake from '../page/snake.coffee';
+import session from 'koa-session';
 
 const Koa = require('koa');
 const Router = require('koa-router');
@@ -15,8 +17,11 @@ const router = new Router();
 
 router.use('/',index.routes());
 router.use(step.middleware());
+router.use(snake.middleware());
 router.use(api.middleware());
 
+app.keys = ['qialanshan.com'];
+app.use(session(app));
 app.use(static_server('assets'));
 app.use(router.routes()).use(router.allowedMethods());
 export default app;

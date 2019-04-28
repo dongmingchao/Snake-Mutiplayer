@@ -6,12 +6,12 @@ let rooms_content = [];
 
 function each_pulse(tent, rt) {
     if (rt === null) return;
-    for (let ws of tent.connects) {
+    for (let ws of tent.connects.filter(e => e)) {
         if (ws.readyState === 1)
             ws.send(JSON.stringify(rt))
         else {
             let index = tent.connects.indexOf(ws);
-            console.log('closed ws', ws);
+            console.log('closed ws', index);
         }
     }
 }
@@ -70,13 +70,14 @@ function init_each_ws(room_index, connect_id) {
     let ws = room.connects[connect_id];
 
     ws.on('close', function () {
-        room.connects.splice(connect_id, 1);
-        room.players.splice(connect_id, 1);
-        room.watchers.splice(connect_id, 1);
+        delete room.connects[connect_id];
+        delete room.players[connect_id];
+        delete room.watchers[connect_id];
+        // delete room.livings[connect_id];
+        // delete room.locations[connect_id];
+        room.locations.splice(connect_id, 1);
         room.livings.splice(connect_id, 1);
-        room.locations.splice(connect_id, 1);
-        room.locations.splice(connect_id, 1);
-        room.pulse.do_in_pulse.splice(connect_id, 1);
+        delete room.pulse.do_in_pulse[connect_id];
         if (room.connects.length === 0) {
             rooms.splice(room_index, 1);
             rooms_content.splice(room_index, 1);
@@ -87,6 +88,12 @@ function init_each_ws(room_index, connect_id) {
         order: 'set players',
         args: [room.players]
     });
+    if (room.food_coordinate) {
+        each_pulse(room, {
+            order: 'set food',
+            args: [room.food_coordinate]
+        });
+    }
     ws.send(JSON.stringify({
         order: 'config game',
         args: [game.speed, game.map.range]
@@ -100,7 +107,7 @@ function init_each_ws(room_index, connect_id) {
                     order: 'set players',
                     args: [room.players]
                 });
-                if (room.snakes[connect_id]) break;
+                // if (room.snakes[connect_id]) break;
                 join_game(rec.args[0], room_index, connect_id);
                 break;
             }
