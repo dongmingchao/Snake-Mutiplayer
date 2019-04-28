@@ -22,12 +22,29 @@ html, body {
     visibility: hidden;
 }
 
-#Snak_head {
+.snak {
     width: 20px;
     height: 20px;
-    background-color: red;
     position: absolute;
     box-shadow: 0 0 15px 1px rgb(100, 99, 99);
+}
+.snak.head {
+    background-color: red;
+}
+.snak.body {
+    background-color: black;
+}
+
+.other_snak{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+}
+.other_snak.head{
+    background-color: green;
+}
+.other_snak.body{
+    background-color: gray;
 }
 
 .food_span {
@@ -36,14 +53,6 @@ html, body {
     background-color: blue;
     width: 20px;
     height: 20px;
-}
-
-.Snak_body {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background-color: black;
-    box-shadow: 0 0 15px 1px black;
 }
 
 #Start_game {

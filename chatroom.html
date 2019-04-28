@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chat Room</title>
+</head>
+
+<body>
+    房间名<input type="text" id="room_name"><button onclick="join_room()">加入</button>
+    我的名字<input type="text" id="my_name"><button onclick="setName()">设定</button>
+    <div style="display: flex;justify-content: space-around;width: 60%">
+        <div style="width:20%">
+            成员列表
+            <hr>
+            <ul id="players">
+                <li>test a</li>
+                <li>test b</li>
+                <li>test c</li>
+            </ul>
+        </div>
+        <div>
+            <div>
+                交谈内容
+                <hr>
+                <pre id="speak_area"></pre>
+            </div>
+            <div>
+                发送内容区域
+                <hr>
+                <textarea id="speak" cols="50" rows="4" style="font-size: 2em"></textarea>
+                <button onclick="send_speak()">发送</button>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    let ws;
+    function join_room() {
+        if (/^\w+$/.test(room_name.value)) {
+            ws = new WebSocket('ws://127.0.0.1:3000/room/' + room_name.value);
+        } else {
+            alert('room name must be a word');
+            return;
+        }
+        ws.onopen = function () {
+            console.log('room open');
+        }
+        ws.onclose = function () {
+            console.log('room close');
+        }
+        ws.onmessage = function (msg) {
+            console.log('message', msg);
+            let rec = JSON.parse(msg.data);
+            switch (rec.order) {
+                case 'set players':
+                    players.innerHTML = '';
+                    for (let each of rec.args[0]) {
+                        let li = document.createElement('li');
+                        li.innerText = each;
+                        players.appendChild(li);
+                    }
+                    break;
+                case 'speak':
+                    speak_area.innerText += rec.args[0] + '\n';
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+    function setName() {
+        if (ws && ws.readyState === 1) {
+            let st = {
+                order: 'set name',
+                args: [my_name.value]
+            }
+            ws.send(JSON.stringify(st));
+        }
+    }
+    function send_speak() {
+        let st = {
+            order: 'speak',
+            args: [my_name.value+': '+speak.value]
+        }
+        ws.send(JSON.stringify(st));
+    }
+</script>
+
+</html>

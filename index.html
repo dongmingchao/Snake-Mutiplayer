@@ -1,27 +1,43 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="css/index.css">
   <title>贪吃蛇</title>
 </head>
+
 <body>
-  <div id="Start_game"><span data-text="" >开始游戏</span></div>
+  <div id="Start_game"><span data-text="">开始游戏</span></div>
   <div id="score"><span>当前得分:</span> <strong>游戏未开始</strong></div>
   <div id="dir"><span>指令状态:</span> <strong>游戏未开始</strong></div>
-  <div id="diff"><span>游戏难度</span> 
+  房间名: <span id="room_name_area"></span><br>
+  <input type="text" id="room_name"><button onclick="join_room()">加入</button><br>
+  我的名字: <span id="my_name_area"></span><br>
+  <input type="text" id="my_name"><button onclick="setName()">设定</button>
+  <div id="diff">
+    <span>游戏难度</span>
     <select>
-      <option value ="300">简单</option>
-      <option value ="100">普通</option>
+      <option value="300">简单</option>
+      <option value="100">普通</option>
       <option value="50">困难</option>
       <option value="10">地狱</option>
     </select>
   </div>
-  <div id="map">  <!--地图-->
-    <div id="Snak_head" class="snake"></div> <!--Snak_head-->
+  <div style="width: 200px">
+    成员列表
+    <hr>
+    <ul id="players">
+      <li>test a</li>
+      <li>test b</li>
+      <li>test c</li>
+    </ul>
   </div>
+  <div id="map"></div>
   <script src="js/Snake.class.js"></script>
   <script src="js/Game.class.js"></script>
-  <script type="text/javascript" src="js/index.js"></script>
+  <script src="js/index.js"></script>
+  <script src="js/websocket/room.js"></script>
 </body>
+
 </html>
